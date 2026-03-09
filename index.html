@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shivsurya Residency - Hotel Management</title>
+    <style>
+        /* CSS STYLES */
+        :root {
+            --primary: #1a2a6c;
+            --secondary: #b21f1f;
+            --accent: #fdbb2d;
+            --light: #f4f4f4;
+            --dark: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        .nav-links button {
+            background: none;
+            border: none;
+            color: white;
+            margin-left: 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .nav-links button:hover {
+            color: var(--accent);
+        }
+
+        /* Sections */
+        section {
+            padding: 40px 5%;
+            display: none; /* Hidden by default, JS will toggle */
+            animation: fadeIn 0.5s;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Home Page */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h2 { font-size: 3rem; margin-bottom: 10px; }
+        .hero p { font-size: 1.2rem; margin-bottom: 20px; }
+        
+        .btn {
+            padding: 10px 20px;
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        /* 3D Room Cards */
+        .rooms-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            perspective: 1000px;
+        }
+
+        .room-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.5s;
+            transform-style: preserve-3d;
+        }
+
+        .room-card:hover {
+            transform: rotateY(10deg) rotateX(5deg);
+        }
+
+        .room-img {
+            height: 200px;
+            background-color: #ddd;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .room-details {
+            padding: 20px;
+        }
+
+        .room-details h3 { color: var(--primary); margin-bottom: 10px; }
+        .specs { list-style: none; margin: 10px 0; font-size: 0.9rem; color: #666; }
+        .specs li::before { content: "✓ "; color: green; }
+
+        /* Forms */
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Admin Panel */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-top: 20px;
+        }
+
+        .admin-table th, .admin-table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .admin-table th { background: var(--primary); color: white; }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        .contact-info {
+            margin-top: 10px;
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <h1>Shivsurya Residency</h1>
+        </div>
+        <div class="nav-links">
+            <button onclick="showSection('home')">Home</button>
+            <button onclick="showSection('rooms')">Rooms</button>
+            <button onclick="showSection('booking')">Book Now</button>
+            <button onclick="showSection('admin')">Admin Panel</button>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="active">
+        <div class="hero">
+            <h2>Welcome to Shivsurya Residency</h2>
+            <p>Luxury stays in the heart of Dhule</p>
+            <a href="#booking" class="btn" onclick="showSection('booking')">Book Your Stay</a>
+        </div>
+        <div style="text-align: center; margin-top: 40px;">
+            <h3>Why Choose Us?</h3>
+            <p>Located at Chalisgaon road Junwane, Dhule. Experience comfort and luxury.</p>
+        </div>
+    </section>
+
+    <!-- Room Management Section -->
+    <section id="rooms">
+        <h2 style="text-align: center; margin-bottom: 30px; color: var(--primary);">Our Premium Rooms</h2>
+        <div class="rooms-container">
+            <!-- Room 1 -->
+            <div class="room-card">
+                <div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="room-details">
+                    <h3>Deluxe Suite</h3>
+                    <ul class="specs">
+                        <li>King Size Bed</li>
+                        <li>3D Surround Sound</li>
+                        <li>City View Balcony</li>
+                        <li>Free Wi-Fi</li>
+                    </ul>
+                    <p><strong>Price:</strong> ₹2500 / Night</p>
+                </div>
+            </div>
+            <!-- Room 2 -->
+            <div class="room-card">
+                <div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="room-details">
+                    <h3>Standard Room</h3>
+                    <ul class="specs">
+                        <li>Queen Size Bed</li>
+                        <li>AC</li>
+                        <li>TV with Cable</li>
+                        <li>Breakfast Included</li>
+                    </ul>
+                    <p><strong>Price:</strong> ₹1500 / Night</p>
+                </div>
+            </div>
+            <!-- Room 3 -->
+            <div class="room-card">
+                <div class="room-img" style="background-image: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="room-details">
+                    <h3>Family Room</h3>
+                    <ul class="specs">
+                        <li>2 Double Beds</li>
+                        <li>Living Area</li>
+                        <li>Mini Fridge</li>
+                        <li>Room Service</li>
+                    </ul>
+                    <p><strong>Price:</strong> ₹3500 / Night</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking & Registration Section -->
+    <section id="booking">
+        <div class="form-container">
+            <h2 style="text-align: center; margin-bottom: 20px;">Online Booking & Registration</h2>
+            <form id="bookingForm" onsubmit="handleBooking(event)">
+                <div class="form-group">
+                    <label>Customer Name</label>
+                    <input type="text" id="custName" required placeholder="Enter full name">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="custPhone" required placeholder="Enter mobile number">
+                </div>
+                <div class="form-group">
+                    <label>Select Room</label>
+                    <select id="roomSelect">
+                        <option value="Deluxe Suite">Deluxe Suite (₹2500)</option>
+                        <option value="Standard Room">Standard Room (₹1500)</option>
+                        <option value="Family Room">Family Room (₹3500)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Check-in Date</label>
+                    <input type="date" id="checkIn" required>
+                </div>
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <select id="paymentMethod">
+                        <option value="Cash">Cash on Arrival</option>
+                        <option value="UPI">UPI / GPay</option>
+                        <option value="Card">Credit/Debit Card</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Confirm Booking</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Admin Panel Section -->
+    <section id="admin">
+        <div class="form-container">
+            <h2 style="text-align: center; color: var(--secondary);">Admin Dashboard</h2>
+            <p style="text-align: center; margin-bottom: 20px;">Manager: Vivek Sakale</p>
+            <button onclick="clearData()" style="background: red; color: white; border: none; padding: 5px 10px; cursor: pointer; float: right;">Reset Data</button>
+            <div style="clear: both;"></div>
+            
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Room Type</th>
+                        <th>Check-in</th>
+                        <th>Payment</th>
+                    </tr>
+                </thead>
+                <tbody id="adminTableBody">
+                    <!-- Data will be inserted here by JS -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <h3>Shivsurya Residency</h3>
+        <p>Chalisgaon road Junwane, Dhule</p>
+        <div class="contact-info">
+            <p>Contact Manager Vivek Sakale: <strong>9404834993</strong></p>
+        </div>
+        <p>&copy; 2023 Shivsurya Residency. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Navigation Logic
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('section');
+            sections.forEach(sec => sec.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        // Booking Logic (Simulating Database)
+        function handleBooking(e) {
+            e.preventDefault();
+
+            // Get values
+            const name = document.getElementById('custName').value;
+            const phone = document.getElementById('custPhone').value;
+            const room = document.getElementById('roomSelect').value;
+            const date = document.getElementById('checkIn').value;
+            const payment = document.getElementById('paymentMethod').value;
+
+            // Create customer object
+            const customer = {
+                name: name,
+                phone: phone,
+                room: room,
+                date: date,
+                payment: payment
+            };
+
+            // Save to LocalStorage
+            let customers = JSON.parse(localStorage.getItem('hotelCustomers')) || [];
+            customers.push(customer);
+            localStorage.setItem('hotelCustomers', JSON.stringify(customers));
+
+            alert("Booking Confirmed! Welcome to Shivsurya Residency.");
+            document.getElementById('bookingForm').reset();
+            loadAdminData(); // Refresh admin panel
+        }
+
+        // Admin Logic
+        function loadAdminData() {
+            const tbody = document.getElementById('adminTableBody');
+            tbody.innerHTML = ""; // Clear current table
+
+            let customers = JSON.parse(localStorage.getItem('hotelCustomers')) || [];
+
+            if(customers.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center'>No records found</td></tr>";
+                return;
+            }
+
+            customers.forEach(cust => {
+                let row = `<tr>
+                    <td>${cust.name}</td>
+                    <td>${cust.phone}</td>
+                    <td>${cust.room}</td>
+                    <td>${cust.date}</td>
+                    <td>${cust.payment}</td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function clearData() {
+            if(confirm("Are you sure you want to delete all records?")) {
+                localStorage.removeItem('hotelCustomers');
+                loadAdminData();
+            }
+        }
+
+        // Load data when page opens
+        window.onload = function() {
+            loadAdminData();
+        }
+    </script>
+</body>
+</html>
